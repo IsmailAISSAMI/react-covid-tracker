@@ -2,16 +2,14 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { GlobalContext } from '../../contexts/Global.context';
 import { Container, Cases, Recovered, Deaths } from './Map.styles';
+import { numberFormatter } from '../../utils/Functions';
 
 const Map = ({ data }) => {
   const [positions, setPositions] = useState([]);
   const { colors, isDark } = useContext(GlobalContext);
   const themeProps = { colors, isDark };
 
-  const numberFormat = useCallback(
-    (number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-    []
-  );
+  const formatter = useCallback((n) => numberFormatter(n), []);
 
   useEffect(() => {
     if (data.length) {
@@ -42,15 +40,15 @@ const Map = ({ data }) => {
                 <h3>{`${country} Stats:`}</h3>
                 <Cases {...themeProps}>
                   Cases:
-                  <span>{numberFormat(cases)}</span>
+                  <span>{formatter(cases)}</span>
                 </Cases>
                 <Recovered {...themeProps}>
                   Recovered:
-                  <span>{numberFormat(recovered)}</span>
+                  <span>{formatter(recovered)}</span>
                 </Recovered>
                 <Deaths {...themeProps}>
                   Deaths:
-                  <span>{numberFormat(deaths)}</span>
+                  <span>{formatter(deaths)}</span>
                 </Deaths>
               </Popup>
             </Marker>
